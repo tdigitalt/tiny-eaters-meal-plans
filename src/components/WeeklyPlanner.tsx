@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -17,7 +16,11 @@ interface MealPlan {
   };
 }
 
-const WeeklyPlanner = () => {
+interface WeeklyPlannerProps {
+  onMealPlanChange: (mealPlan: MealPlan) => void;
+}
+
+const WeeklyPlanner = ({ onMealPlanChange }: WeeklyPlannerProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [mealPlan, setMealPlan] = useState<MealPlan>({
     monday: { breakfast: '', lunch: '', dinner: '', snack: '' },
@@ -32,6 +35,11 @@ const WeeklyPlanner = () => {
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
+
+  // Notify parent component when meal plan changes
+  useEffect(() => {
+    onMealPlanChange(mealPlan);
+  }, [mealPlan, onMealPlanChange]);
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);

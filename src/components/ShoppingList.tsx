@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Copy, Check, ShoppingCart } from 'lucide-react';
+import { getMealById } from '@/data/mealDatabase';
 import { toast } from '@/hooks/use-toast';
 
 interface ShoppingListProps {
@@ -16,12 +16,12 @@ const ShoppingList = ({ mealPlan }: ShoppingListProps) => {
   const [organizedList, setOrganizedList] = useState<{[category: string]: string[]}>({});
 
   const categories = {
-    'Produce': ['apples', 'bananas', 'berries', 'tomatoes', 'cucumber', 'lettuce', 'carrots', 'broccoli', 'bell peppers', 'onions', 'garlic', 'herbs', 'lemon', 'avocado', 'spinach'],
-    'Dairy': ['milk', 'cheese', 'yogurt', 'butter', 'cream cheese', 'eggs'],
-    'Meat & Protein': ['chicken', 'ground beef', 'fish', 'turkey', 'ham', 'pepperoni'],
-    'Pantry': ['flour', 'sugar', 'honey', 'oil', 'pasta', 'rice', 'oats', 'bread', 'crackers', 'cereal', 'nuts', 'soy sauce', 'marinara sauce'],
-    'Frozen': ['frozen fruit', 'frozen vegetables', 'frozen waffles', 'nuggets'],
-    'Condiments': ['mayo', 'mustard', 'ketchup', 'salsa', 'dressing', 'peanut butter', 'hummus']
+    'Produce': ['apple', 'banana', 'berries', 'tomato', 'cucumber', 'lettuce', 'carrot', 'broccoli', 'bell pepper', 'onion', 'garlic', 'herb', 'lemon', 'avocado', 'spinach', 'fruit', 'vegetable', 'melon', 'pineapple', 'strawberr', 'grape'],
+    'Dairy': ['milk', 'cheese', 'yogurt', 'butter', 'cream cheese', 'egg'],
+    'Meat & Protein': ['chicken', 'ground beef', 'fish', 'turkey', 'ham', 'pepperoni', 'beef'],
+    'Pantry': ['flour', 'sugar', 'honey', 'oil', 'pasta', 'rice', 'oats', 'bread', 'crackers', 'cereal', 'nuts', 'soy sauce', 'marinara sauce', 'sauce', 'syrup', 'dressing', 'mayo', 'peanut butter', 'hummus', 'salt', 'pepper', 'cinnamon'],
+    'Frozen': ['frozen', 'waffle', 'nugget'],
+    'Bakery': ['bagel', 'bun', 'muffin', 'tortilla', 'roll']
   };
 
   useEffect(() => {
@@ -34,21 +34,10 @@ const ShoppingList = ({ mealPlan }: ShoppingListProps) => {
       const dayMeals = mealPlan[day];
       Object.values(dayMeals).forEach((mealId: any) => {
         if (mealId) {
-          // In a real app, we'd fetch the meal ingredients from the database
-          // For now, we'll use some common ingredients based on meal types
-          const commonIngredients = [
-            'Eggs', 'Milk', 'Bread', 'Cheese', 'Chicken breast', 'Ground beef',
-            'Rice', 'Pasta', 'Olive oil', 'Onions', 'Garlic', 'Tomatoes',
-            'Bell peppers', 'Carrots', 'Broccoli', 'Apples', 'Bananas',
-            'Yogurt', 'Oats', 'Honey', 'Butter', 'Salt', 'Pepper'
-          ];
-          
-          // Add some random ingredients for demonstration
-          const randomIngredients = commonIngredients
-            .sort(() => 0.5 - Math.random())
-            .slice(0, Math.floor(Math.random() * 5) + 3);
-          
-          randomIngredients.forEach(ingredient => allIngredients.add(ingredient));
+          const meal = getMealById(mealId);
+          if (meal) {
+            meal.ingredients.forEach(ingredient => allIngredients.add(ingredient));
+          }
         }
       });
     });
@@ -78,7 +67,7 @@ const ShoppingList = ({ mealPlan }: ShoppingListProps) => {
       }
     });
 
-    // Remove empty categories
+    // Remove empty categories and sort
     Object.keys(organized).forEach(category => {
       if (organized[category].length === 0) {
         delete organized[category];

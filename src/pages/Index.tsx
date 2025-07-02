@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import WeeklyPlanner from '@/components/WeeklyPlanner';
@@ -27,10 +27,14 @@ const Index = () => {
     }
   }, []);
 
+  const handleMealPlanChange = useCallback((newMealPlan: any) => {
+    setMealPlan(newMealPlan);
+  }, []);
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'planner':
-        return <WeeklyPlanner />;
+        return <WeeklyPlanner onMealPlanChange={handleMealPlanChange} />;
       case 'shopping':
         return <ShoppingList mealPlan={mealPlan} />;
       case 'ideas':
@@ -38,7 +42,7 @@ const Index = () => {
       case 'reference':
         return <QuickReference />;
       default:
-        return <WeeklyPlanner />;
+        return <WeeklyPlanner onMealPlanChange={handleMealPlanChange} />;
     }
   };
 
