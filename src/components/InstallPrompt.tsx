@@ -12,38 +12,62 @@ const InstallPrompt = () => {
 
   useEffect(() => {
     // Check if running in standalone mode
-    const standalone = window.matchMedia('(display-mode: standalone)').matches;
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || 
+                      (window.navigator as any).standalone === true;
     setIsStandalone(standalone);
 
     // Check if iOS
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(iOS);
+
+    console.log('PWA Check:', { iOS, standalone });
 
     // Handle beforeinstallprompt for Android/Chrome
     const handler = (e: Event) => {
+      console.log('beforeinstallprompt fired');
       e.preventDefault();
       setDeferredPrompt(e);
-      setShowPrompt(true);
-      console.log('Install prompt available');
+      
+      // Show prompt after a short delay if not dismissed
+      setTimeout(() => {
+        if (!sessionStorage.getItem('installPromptDismissed')) {
+          setShowPrompt(true);
+        }
+      }, 1500);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
-    // Show iOS install instructions if on iOS and not standalone
+    // For iOS, show install instructions if not standalone and not dismissed
     if (iOS && !standalone) {
-      // Wait a bit before showing to ensure page is loaded
       const timer = setTimeout(() => {
         if (!sessionStorage.getItem('installPromptDismissed')) {
+          console.log('Showing iOS install prompt');
           setShowPrompt(true);
         }
-      }, 2000);
+      }, 3000);
       return () => clearTimeout(timer);
+    }
+
+    // For other browsers, also show after delay if no beforeinstallprompt fired
+    if (!iOS) {
+      const fallbackTimer = setTimeout(() => {
+        if (!deferredPrompt && !sessionStorage.getItem('installPromptDismissed') && !standalone) {
+          console.log('Showing fallback install prompt');
+          setShowPrompt(true);
+        }
+      }, 5000);
+      
+      return () => {
+        clearTimeout(fallbackTimer);
+        window.removeEventListener('beforeinstallprompt', handler);
+      };
     }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
     };
-  }, []);
+  }, [deferredPrompt]);
 
   const handleInstall = async () => {
     if (deferredPrompt) {
@@ -51,9 +75,10 @@ const InstallPrompt = () => {
       const { outcome } = await deferredPrompt.userChoice;
       console.log('Install outcome:', outcome);
       
+      setDeferredPrompt(null);
+      setShowPrompt(false);
       if (outcome === 'accepted') {
-        setDeferredPrompt(null);
-        setShowPrompt(false);
+        sessionStorage.setItem('installPromptDismissed', 'true');
       }
     }
   };
@@ -63,8 +88,8 @@ const InstallPrompt = () => {
     sessionStorage.setItem('installPromptDismissed', 'true');
   };
 
-  // Don't show if already installed or dismissed
-  if (isStandalone || sessionStorage.getItem('installPromptDismissed') === 'true') {
+  // Don't show if already installed
+  if (isStandalone) {
     return null;
   }
 

@@ -6,6 +6,7 @@ import { Copy, Check } from 'lucide-react';
 import { weeklyTemplates, getTemplateById } from '@/data/mealTemplates';
 import { mealDatabase, getMealById, getMealsByCategory } from '@/data/mealDatabase';
 import { toast } from '@/hooks/use-toast';
+import { saveMealPlan, loadMealPlan, saveSelectedTemplate, loadSelectedTemplate, getUserId } from '@/utils/userStorage';
 
 interface MealPlan {
   [day: string]: {
@@ -36,13 +37,42 @@ const WeeklyPlanner = ({ onMealPlanChange }: WeeklyPlannerProps) => {
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
 
-  // Notify parent component when meal plan changes
+  // Load saved data on component mount
   useEffect(() => {
+    const userId = getUserId();
+    console.log('Loading data for user:', userId);
+    
+    // Load saved meal plan
+    const savedMealPlan = loadMealPlan();
+    if (savedMealPlan) {
+      setMealPlan(savedMealPlan);
+      onMealPlanChange(savedMealPlan);
+    }
+    
+    // Load selected template
+    const savedTemplate = loadSelectedTemplate();
+    if (savedTemplate) {
+      setSelectedTemplate(savedTemplate);
+    }
+  }, [onMealPlanChange]);
+
+  // Save meal plan whenever it changes
+  useEffect(() => {
+    // Only save if meal plan has actual content
+    const hasContent = Object.values(mealPlan).some(day => 
+      Object.values(day).some(meal => meal !== '')
+    );
+    
+    if (hasContent) {
+      saveMealPlan(mealPlan);
+    }
     onMealPlanChange(mealPlan);
   }, [mealPlan, onMealPlanChange]);
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
+    saveSelectedTemplate(templateId);
+    
     const template = getTemplateById(templateId);
     if (template) {
       setMealPlan(template.meals);
