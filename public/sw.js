@@ -1,20 +1,20 @@
-const CACHE_NAME = 'meal-planner-v2';
+
+const CACHE_NAME = 'meal-planner-v3';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png',
-  '/assets/index.css',
-  '/assets/index.js'
+  '/icon-512.png'
 ];
 
 // Install event
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Opened cache');
+        console.log('Opened cache:', CACHE_NAME);
         return cache.addAll(urlsToCache);
       })
       .catch((error) => {
@@ -26,6 +26,7 @@ self.addEventListener('install', (event) => {
 
 // Activate event
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -79,17 +80,17 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Background sync for when connection is restored
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'background-sync') {
-    console.log('Background sync triggered');
+// Enhanced PWA installation detection
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
-// Push notifications (for future features)
+// Push notifications
 self.addEventListener('push', (event) => {
   const options = {
-    body: event.data ? event.data.text() : 'New meal planning reminder',
+    body: event.data ? event.data.text() : 'Nuova notifica da Family Meal Planner',
     icon: '/icon-192.png',
     badge: '/icon-192.png',
     vibrate: [100, 50, 100],

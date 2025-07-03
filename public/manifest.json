@@ -12,6 +12,7 @@
   "categories": ["food", "lifestyle", "productivity"],
   "lang": "it",
   "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icon-192.png",
