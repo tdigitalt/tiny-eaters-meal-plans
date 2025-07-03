@@ -8,7 +8,10 @@
   "background_color": "#ffffff",
   "theme_color": "#7CB342",
   "orientation": "portrait-primary",
+  "scope": "/",
   "categories": ["food", "lifestyle", "productivity"],
+  "lang": "it",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -21,6 +24,30 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Weekly Planner",
+      "short_name": "Planner",
+      "description": "Plan your weekly meals",
+      "url": "/?tab=planner",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Shopping List",
+      "short_name": "Shopping",
+      "description": "View your shopping list",
+      "url": "/?tab=shopping",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ]
 }
