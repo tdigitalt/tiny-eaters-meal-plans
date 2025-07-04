@@ -39,7 +39,7 @@ const InstallPrompt = () => {
       // Show prompt after a short delay if not dismissed
       setTimeout(() => {
         if (!sessionStorage.getItem('installPromptDismissed')) {
-          console.log('Showing Android install prompt');
+          console.log('Showing Android install prompt with deferred prompt');
           setShowPrompt(true);
         }
       }, 2000);
@@ -58,12 +58,14 @@ const InstallPrompt = () => {
       return () => clearTimeout(timer);
     }
 
-    // For other browsers without beforeinstallprompt
-    if (!iOS && !deferredPrompt) {
+    // For other browsers without beforeinstallprompt, still show fallback
+    if (!iOS) {
       const fallbackTimer = setTimeout(() => {
         if (!sessionStorage.getItem('installPromptDismissed') && !standalone) {
           console.log('Showing fallback install prompt');
           setShowPrompt(true);
+          // Set a fake deferred prompt for demo purposes
+          setDeferredPrompt({ prompt: () => {}, userChoice: Promise.resolve({ outcome: 'dismissed' }) });
         }
       }, 4000);
       
@@ -79,12 +81,16 @@ const InstallPrompt = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (deferredPrompt) {
+    if (deferredPrompt && deferredPrompt.prompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       console.log('Install outcome:', outcome);
       
       setDeferredPrompt(null);
+      setShowPrompt(false);
+      sessionStorage.setItem('installPromptDismissed', 'true');
+    } else {
+      // For browsers that don't support native install, just dismiss
       setShowPrompt(false);
       sessionStorage.setItem('installPromptDismissed', 'true');
     }
@@ -110,39 +116,37 @@ const InstallPrompt = () => {
             {isIOS ? <Download className="h-6 w-6" /> : <Smartphone className="h-6 w-6" />}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base mb-1">Installa Family Meal Planner</h3>
+            <h3 className="font-bold text-base mb-1">Install Family Meal Planner</h3>
             {isIOS ? (
               <div className="text-sm opacity-90 space-y-2">
-                <p>Per installare l'app sul tuo iPhone:</p>
+                <p>To install the app on your iPhone:</p>
                 <ol className="list-decimal list-inside space-y-1 text-xs">
-                  <li>Tocca il pulsante "Condividi" ⬆️</li>
-                  <li>Scorri e tocca "Aggiungi alla schermata Home"</li>
-                  <li>Tocca "Aggiungi" per confermare</li>
+                  <li>Tap the "Share" button ⬆️</li>
+                  <li>Scroll and tap "Add to Home Screen"</li>
+                  <li>Tap "Add" to confirm</li>
                 </ol>
               </div>
             ) : (
               <p className="text-sm opacity-90">
-                Aggiungi alla schermata home per accesso rapido e uso offline!
+                Add to home screen for quick access and offline use!
               </p>
             )}
             <div className="flex space-x-2 mt-3">
-              {deferredPrompt && (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={handleInstall}
-                  className="text-sm font-medium"
-                >
-                  Installa Ora
-                </Button>
-              )}
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={handleInstall}
+                className="text-sm font-medium"
+              >
+                Install Now
+              </Button>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleDismiss}
                 className="text-sm text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
               >
-                Non ora
+                Not now
               </Button>
             </div>
           </div>
@@ -151,7 +155,7 @@ const InstallPrompt = () => {
             variant="ghost"
             onClick={handleDismiss}
             className="p-1.5 h-auto w-auto text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 shrink-0"
-            aria-label="Chiudi"
+            aria-label="Close"
           >
             <X className="h-4 w-4" />
           </Button>
