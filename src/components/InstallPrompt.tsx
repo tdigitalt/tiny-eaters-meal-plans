@@ -11,7 +11,7 @@ const InstallPrompt = () => {
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    // Check if running in standalone mode (multiple methods for better detection)
+    // Check if running in standalone mode (app is already installed)
     const standalone = window.matchMedia('(display-mode: standalone)').matches || 
                       (window.navigator as any).standalone === true ||
                       window.matchMedia('(display-mode: fullscreen)').matches ||
@@ -24,76 +24,67 @@ const InstallPrompt = () => {
 
     console.log('PWA Check:', { iOS, standalone, userAgent: navigator.userAgent });
 
-    // Don't show if already standalone (installed)
+    // Don't show if already installed
     if (standalone) {
       console.log('App is already installed - not showing prompt');
       return;
     }
 
-    // Handle beforeinstallprompt for Android/Chrome
+    // Handle beforeinstallprompt for browsers that support it
     const handler = (e: Event) => {
       console.log('beforeinstallprompt fired');
       e.preventDefault();
       setDeferredPrompt(e);
-      
-      // Show prompt after a short delay if not dismissed
-      setTimeout(() => {
-        if (!sessionStorage.getItem('installPromptDismissed')) {
-          console.log('Showing Android install prompt with deferred prompt');
-          setShowPrompt(true);
-        }
-      }, 2000);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
-    // For iOS, show install instructions if not standalone and not dismissed
-    if (iOS && !standalone) {
-      const timer = setTimeout(() => {
-        if (!sessionStorage.getItem('installPromptDismissed')) {
-          console.log('Showing iOS install prompt');
-          setShowPrompt(true);
-        }
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-
-    // For other browsers without beforeinstallprompt, still show fallback
-    if (!iOS) {
-      const fallbackTimer = setTimeout(() => {
-        if (!sessionStorage.getItem('installPromptDismissed') && !standalone) {
-          console.log('Showing fallback install prompt');
-          setShowPrompt(true);
-          // Set a fake deferred prompt for demo purposes
-          setDeferredPrompt({ prompt: () => {}, userChoice: Promise.resolve({ outcome: 'dismissed' }) });
-        }
-      }, 4000);
-      
-      return () => {
-        clearTimeout(fallbackTimer);
-        window.removeEventListener('beforeinstallprompt', handler);
-      };
-    }
+    // Show prompt after a delay if not dismissed and not installed
+    const timer = setTimeout(() => {
+      if (!sessionStorage.getItem('installPromptDismissed') && !standalone) {
+        console.log('Showing install prompt');
+        setShowPrompt(true);
+      }
+    }, 3000);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener('beforeinstallprompt', handler);
     };
   }, []);
 
   const handleInstall = async () => {
     if (deferredPrompt && deferredPrompt.prompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log('Install outcome:', outcome);
-      
-      setDeferredPrompt(null);
-      setShowPrompt(false);
-      sessionStorage.setItem('installPromptDismissed', 'true');
+      // Browser supports native installation
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('Install outcome:', outcome);
+        
+        if (outcome === 'accepted') {
+          setShowPrompt(false);
+          sessionStorage.setItem('installPromptDismissed', 'true');
+        }
+        setDeferredPrompt(null);
+      } catch (error) {
+        console.error('Installation failed:', error);
+        // Show manual instructions as fallback
+        showManualInstructions();
+      }
     } else {
-      // For browsers that don't support native install, just dismiss
-      setShowPrompt(false);
-      sessionStorage.setItem('installPromptDismissed', 'true');
+      // No native support, show manual instructions
+      showManualInstructions();
     }
+  };
+
+  const showManualInstructions = () => {
+    if (isIOS) {
+      alert('Per installare l\'app:\n1. Tocca il pulsante Condividi ⬆️\n2. Scorri e tocca "Aggiungi alla schermata Home"\n3. Tocca "Aggiungi" per confermare');
+    } else {
+      alert('Per installare l\'app:\n1. Tocca il menu del browser (⋮)\n2. Seleziona "Aggiungi alla schermata Home" o "Installa app"\n3. Conferma l\'installazione');
+    }
+    setShowPrompt(false);
+    sessionStorage.setItem('installPromptDismissed', 'true');
   };
 
   const handleDismiss = () => {
@@ -116,29 +107,18 @@ const InstallPrompt = () => {
             {isIOS ? <Download className="h-6 w-6" /> : <Smartphone className="h-6 w-6" />}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-base mb-1">Install Family Meal Planner</h3>
-            {isIOS ? (
-              <div className="text-sm opacity-90 space-y-2">
-                <p>To install the app on your iPhone:</p>
-                <ol className="list-decimal list-inside space-y-1 text-xs">
-                  <li>Tap the "Share" button ⬆️</li>
-                  <li>Scroll and tap "Add to Home Screen"</li>
-                  <li>Tap "Add" to confirm</li>
-                </ol>
-              </div>
-            ) : (
-              <p className="text-sm opacity-90">
-                Add to home screen for quick access and offline use!
-              </p>
-            )}
-            <div className="flex space-x-2 mt-3">
+            <h3 className="font-bold text-base mb-1">Installa Family Meal Planner</h3>
+            <p className="text-sm opacity-90 mb-3">
+              Aggiungi l'app alla schermata home per un accesso rapido e utilizzo offline!
+            </p>
+            <div className="flex space-x-2">
               <Button
                 size="sm"
                 variant="secondary"
                 onClick={handleInstall}
                 className="text-sm font-medium"
               >
-                Install Now
+                Installa Ora
               </Button>
               <Button
                 size="sm"
@@ -146,7 +126,7 @@ const InstallPrompt = () => {
                 onClick={handleDismiss}
                 className="text-sm text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
               >
-                Not now
+                Non ora
               </Button>
             </div>
           </div>
@@ -155,7 +135,7 @@ const InstallPrompt = () => {
             variant="ghost"
             onClick={handleDismiss}
             className="p-1.5 h-auto w-auto text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 shrink-0"
-            aria-label="Close"
+            aria-label="Chiudi"
           >
             <X className="h-4 w-4" />
           </Button>
