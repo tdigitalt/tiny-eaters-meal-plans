@@ -11,16 +11,24 @@ const InstallPrompt = () => {
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    // Check if running in standalone mode
+    // Check if running in standalone mode (multiple methods for better detection)
     const standalone = window.matchMedia('(display-mode: standalone)').matches || 
-                      (window.navigator as any).standalone === true;
+                      (window.navigator as any).standalone === true ||
+                      window.matchMedia('(display-mode: fullscreen)').matches ||
+                      window.matchMedia('(display-mode: minimal-ui)').matches;
     setIsStandalone(standalone);
 
     // Check if iOS
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(iOS);
 
-    console.log('PWA Check:', { iOS, standalone });
+    console.log('PWA Check:', { iOS, standalone, userAgent: navigator.userAgent });
+
+    // Don't show if already standalone (installed)
+    if (standalone) {
+      console.log('App is already installed - not showing prompt');
+      return;
+    }
 
     // Handle beforeinstallprompt for Android/Chrome
     const handler = (e: Event) => {
@@ -31,9 +39,10 @@ const InstallPrompt = () => {
       // Show prompt after a short delay if not dismissed
       setTimeout(() => {
         if (!sessionStorage.getItem('installPromptDismissed')) {
+          console.log('Showing Android install prompt');
           setShowPrompt(true);
         }
-      }, 1500);
+      }, 2000);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -49,14 +58,14 @@ const InstallPrompt = () => {
       return () => clearTimeout(timer);
     }
 
-    // For other browsers, also show after delay if no beforeinstallprompt fired
-    if (!iOS) {
+    // For other browsers without beforeinstallprompt
+    if (!iOS && !deferredPrompt) {
       const fallbackTimer = setTimeout(() => {
-        if (!deferredPrompt && !sessionStorage.getItem('installPromptDismissed') && !standalone) {
+        if (!sessionStorage.getItem('installPromptDismissed') && !standalone) {
           console.log('Showing fallback install prompt');
           setShowPrompt(true);
         }
-      }, 5000);
+      }, 4000);
       
       return () => {
         clearTimeout(fallbackTimer);
@@ -67,7 +76,7 @@ const InstallPrompt = () => {
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
     };
-  }, [deferredPrompt]);
+  }, []);
 
   const handleInstall = async () => {
     if (deferredPrompt) {
@@ -77,9 +86,7 @@ const InstallPrompt = () => {
       
       setDeferredPrompt(null);
       setShowPrompt(false);
-      if (outcome === 'accepted') {
-        sessionStorage.setItem('installPromptDismissed', 'true');
-      }
+      sessionStorage.setItem('installPromptDismissed', 'true');
     }
   };
 
@@ -119,7 +126,7 @@ const InstallPrompt = () => {
               </p>
             )}
             <div className="flex space-x-2 mt-3">
-              {!isIOS && deferredPrompt && (
+              {deferredPrompt && (
                 <Button
                   size="sm"
                   variant="secondary"

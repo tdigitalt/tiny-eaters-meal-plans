@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
 import { weeklyTemplates, getTemplateById } from '@/data/mealTemplates';
@@ -149,15 +151,17 @@ const WeeklyPlanner = ({ onMealPlanChange }: WeeklyPlannerProps) => {
               <SelectTrigger>
                 <SelectValue placeholder="Select a meal planning template" />
               </SelectTrigger>
-              <SelectContent>
-                {weeklyTemplates.map(template => (
-                  <SelectItem key={template.id} value={template.id}>
-                    <div>
-                      <div className="font-medium">{template.name}</div>
-                      <div className="text-xs text-muted-foreground">{template.description}</div>
-                    </div>
-                  </SelectItem>
-                ))}
+              <SelectContent className="max-h-80">
+                <ScrollArea className="h-72">
+                  {weeklyTemplates.map(template => (
+                    <SelectItem key={template.id} value={template.id} className="py-3">
+                      <div>
+                        <div className="font-medium">{template.name}</div>
+                        <div className="text-xs text-muted-foreground">{template.description}</div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
               </SelectContent>
             </Select>
           </div>
