@@ -6,7 +6,6 @@ import WeeklyPlanner from '@/components/WeeklyPlanner';
 import ShoppingList from '@/components/ShoppingList';
 import MealIdeas from '@/components/MealIdeas';
 import QuickReference from '@/components/QuickReference';
-import InstallPrompt from '@/components/InstallPrompt';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('planner');
@@ -54,8 +53,6 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6 pb-24">
         {renderActiveTab()}
       </main>
-
-      <InstallPrompt />
     </div>
   );
 };
