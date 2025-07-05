@@ -11,64 +11,64 @@ const QuickReference = () => {
   ];
 
   const storageGuide = [
-    { food: 'Banane', tip: 'Conserva a temperatura ambiente, in frigo quando mature' },
-    { food: 'Pane', tip: 'Congela le pagnotte extra, tosta direttamente dal freezer' },
-    { food: 'Latte', tip: 'Conserva nella parte più fredda del frigo, non nello sportello' },
-    { food: 'Frutti di bosco', tip: 'Non lavare fino al momento del consumo' },
-    { food: 'Avocado', tip: 'Fai maturare in sacchetto di carta, poi in frigo' },
-    { food: 'Formaggio', tip: 'Avvolgi in carta da forno, poi in pellicola' }
+    { food: 'Bananas', tip: 'Store at room temperature, refrigerate when ripe' },
+    { food: 'Bread', tip: 'Freeze extra loaves, toast directly from freezer' },
+    { food: 'Milk', tip: 'Store in coldest part of fridge, not in door' },
+    { food: 'Berries', tip: 'Don\'t wash until ready to eat' },
+    { food: 'Avocado', tip: 'Ripen in paper bag, then refrigerate' },
+    { food: 'Cheese', tip: 'Wrap in parchment paper, then plastic wrap' }
   ];
 
   const substitutions = [
-    { original: '1 uovo', substitute: '1/4 tazza di purea di mela o 1 banana schiacciata' },
-    { original: '1 tazza di latte', substitute: '1 tazza di latte vegetale o 1/2 tazza latte evaporato + 1/2 tazza acqua' },
-    { original: '1 tazza di farina', substitute: '1 tazza di farina di mandorle o 3/4 tazza farina di cocco' },
-    { original: '1 cucchiaio erbe fresche', substitute: '1 cucchiaino erbe secche' },
-    { original: '1 tazza di zucchero', substitute: '3/4 tazza miele o sciroppo d\'acero (ridurre liquidi di 1/4 tazza)' }
+    { original: '1 egg', substitute: '1/4 cup applesauce or 1 mashed banana' },
+    { original: '1 cup milk', substitute: '1 cup plant milk or 1/2 cup evaporated milk + 1/2 cup water' },
+    { original: '1 cup flour', substitute: '1 cup almond flour or 3/4 cup coconut flour' },
+    { original: '1 tbsp fresh herbs', substitute: '1 tsp dried herbs' },
+    { original: '1 cup sugar', substitute: '3/4 cup honey or maple syrup (reduce liquids by 1/4 cup)' }
   ];
 
   const prepShortcuts = [
-    { task: 'Lavare e tagliare verdure', tip: 'Fallo la domenica per tutta la settimana' },
-    { task: 'Preparare smoothie pack', tip: 'Pre-porzione la frutta congelata in sacchetti' },
-    { task: 'Cuocere cereali in grandi quantità', tip: 'Prepara grandi porzioni di riso/quinoa' },
-    { task: 'Preparare porzioni di snack', tip: 'Dividi crackers e frutta in contenitori' },
-    { task: 'Impasto per muffin', tip: 'Mescola ingredienti secchi in anticipo' }
+    { task: 'Wash and chop vegetables', tip: 'Do on Sunday for the whole week' },
+    { task: 'Prepare smoothie packs', tip: 'Pre-portion frozen fruit in bags' },
+    { task: 'Cook grains in bulk', tip: 'Prepare large batches of rice/quinoa' },
+    { task: 'Portion snacks', tip: 'Divide crackers and fruit into containers' },
+    { task: 'Muffin batter prep', tip: 'Mix dry ingredients in advance' }
   ];
 
   const troubleshooting = [
-    { problem: 'Non mangia verdure', solution: 'Mescola piccole quantità nei cibi preferiti, offri ripetutamente senza pressione' },
-    { problem: 'Vuole solo snack', solution: 'Servi prima i pasti, limita gli snack a 2 al giorno' },
-    { problem: 'Rifiuta cibi nuovi', solution: 'Metti piccole quantità nel piatto senza pressione' },
-    { problem: 'Mangia troppo lentamente', solution: 'Stabilisci tempi ragionevoli, mantieni calma e pazienza' },
-    { problem: 'Vuole sempre lo stesso cibo', solution: 'È normale! Offri varietà insieme ai preferiti' }
+    { problem: 'Won\'t eat vegetables', solution: 'Mix small amounts into favorite foods, offer repeatedly without pressure' },
+    { problem: 'Only wants snacks', solution: 'Serve meals first, limit snacks to 2 per day' },
+    { problem: 'Refuses new foods', solution: 'Put small amounts on plate without pressure' },
+    { problem: 'Eats too slowly', solution: 'Set reasonable time limits, stay calm and patient' },
+    { problem: 'Wants same food always', solution: 'It\'s normal! Offer variety alongside favorites' }
   ];
 
   const nutritionBalance = [
-    { component: 'Proteine', sources: 'Uova, pollo, legumi, formaggio, yogurt', amount: '2-3 porzioni/giorno' },
-    { component: 'Frutta e Verdura', sources: 'Fresche, congelate o essiccate', amount: '5+ porzioni/giorno' },
-    { component: 'Cereali Integrali', sources: 'Riso integrale, pane integrale, avena', amount: '3+ porzioni/giorno' },
-    { component: 'Latticini', sources: 'Latte, formaggio, yogurt', amount: '2-3 porzioni/giorno' },
-    { component: 'Grassi Sani', sources: 'Avocado, noci, olio d\'oliva', amount: 'Includi nei pasti' }
+    { component: 'Protein', sources: 'Eggs, chicken, beans, cheese, yogurt', amount: '2-3 servings/day' },
+    { component: 'Fruits & Vegetables', sources: 'Fresh, frozen or dried', amount: '5+ servings/day' },
+    { component: 'Whole Grains', sources: 'Brown rice, whole wheat bread, oats', amount: '3+ servings/day' },
+    { component: 'Dairy', sources: 'Milk, cheese, yogurt', amount: '2-3 servings/day' },
+    { component: 'Healthy Fats', sources: 'Avocado, nuts, olive oil', amount: 'Include in meals' }
   ];
 
   const safetyTips = [
-    { tip: 'Supervisiona sempre i bambini mentre cucinano' },
-    { tip: 'Tieni i manici dei coltelli rivolti lontano dai bambini' },
-    { tip: 'Insegna il lavaggio corretto delle mani prima e dopo aver cucinato' },
-    { tip: 'Usa sgabelli con ringhiere per accedere al bancone' },
-    { tip: 'Inizia con ingredienti freddi per evitare scottature' },
-    { tip: 'Assegna compiti adatti all\'età (mescolare, misurare, lavare)' }
+    { tip: 'Always supervise children while cooking' },
+    { tip: 'Keep knife handles turned away from children' },
+    { tip: 'Teach proper handwashing before and after cooking' },
+    { tip: 'Use step stools with railings to reach counters' },
+    { tip: 'Start with cold ingredients to avoid burns' },
+    { tip: 'Assign age-appropriate tasks (stirring, measuring, washing)' }
   ];
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Guida di Riferimento Rapido</CardTitle>
+          <CardTitle>Quick Reference Guide</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Guide essenziali e consigli per una pianificazione dei pasti di successo. Salva questa pagina per un accesso rapido!
+            Essential guides and tips for successful meal planning. Save this page for quick access!
           </p>
         </CardContent>
       </Card>
@@ -77,31 +77,31 @@ const QuickReference = () => {
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-1">
           <TabsTrigger value="portions" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Scale className="h-3 w-3" />
-            <span>Porzioni</span>
+            <span>Portions</span>
           </TabsTrigger>
           <TabsTrigger value="storage" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Archive className="h-3 w-3" />
-            <span>Conservare</span>
+            <span>Storage</span>
           </TabsTrigger>
           <TabsTrigger value="substitutions" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Zap className="h-3 w-3" />
-            <span>Sostituzioni</span>
+            <span>Substitutions</span>
           </TabsTrigger>
           <TabsTrigger value="prep" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Clock className="h-3 w-3" />
-            <span>Preparazione</span>
+            <span>Prep</span>
           </TabsTrigger>
           <TabsTrigger value="troubleshooting" className="flex items-center justify-center space-x-1 text-xs px-2">
             <AlertTriangle className="h-3 w-3" />
-            <span>Aiuto</span>
+            <span>Help</span>
           </TabsTrigger>
           <TabsTrigger value="nutrition" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Users className="h-3 w-3" />
-            <span>Nutrizione</span>
+            <span>Nutrition</span>
           </TabsTrigger>
           <TabsTrigger value="safety" className="flex items-center justify-center space-x-1 text-xs px-2">
             <Shield className="h-3 w-3" />
-            <span>Sicurezza</span>
+            <span>Safety</span>
           </TabsTrigger>
         </TabsList>
 
@@ -110,7 +110,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Scale className="h-5 w-5" />
-                <span>Porzioni per Età</span>
+                <span>Portions by Age</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -122,23 +122,23 @@ const QuickReference = () => {
                     </Badge>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                       <div className="text-center p-3 bg-muted/50 rounded-lg">
-                        <div className="font-medium text-sm">Proteine</div>
+                        <div className="font-medium text-sm">Protein</div>
                         <div className="text-xs text-muted-foreground mt-1">{guide.protein}</div>
                       </div>
                       <div className="text-center p-3 bg-muted/50 rounded-lg">
-                        <div className="font-medium text-sm">Cereali</div>
+                        <div className="font-medium text-sm">Grains</div>
                         <div className="text-xs text-muted-foreground mt-1">{guide.grains}</div>
                       </div>
                       <div className="text-center p-3 bg-muted/50 rounded-lg">
-                        <div className="font-medium text-sm">Frutta</div>
+                        <div className="font-medium text-sm">Fruits</div>
                         <div className="text-xs text-muted-foreground mt-1">{guide.fruits}</div>
                       </div>
                       <div className="text-center p-3 bg-muted/50 rounded-lg">
-                        <div className="font-medium text-sm">Verdure</div>
+                        <div className="font-medium text-sm">Vegetables</div>
                         <div className="text-xs text-muted-foreground mt-1">{guide.vegetables}</div>
                       </div>
                       <div className="text-center p-3 bg-muted/50 rounded-lg">
-                        <div className="font-medium text-sm">Latticini</div>
+                        <div className="font-medium text-sm">Dairy</div>
                         <div className="text-xs text-muted-foreground mt-1">{guide.dairy}</div>
                       </div>
                     </div>
@@ -154,7 +154,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Archive className="h-5 w-5" />
-                <span>Consigli per la Conservazione</span>
+                <span>Storage Tips</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -175,7 +175,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Zap className="h-5 w-5" />
-                <span>Sostituzioni Ingredienti</span>
+                <span>Ingredient Substitutions</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -197,7 +197,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Clock className="h-5 w-5" />
-                <span>Scorciatoie per la Preparazione</span>
+                <span>Prep Shortcuts</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -218,7 +218,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <AlertTriangle className="h-5 w-5" />
-                <span>Sfide nell'Alimentazione</span>
+                <span>Feeding Challenges</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -226,10 +226,10 @@ const QuickReference = () => {
                 {troubleshooting.map((item, index) => (
                   <div key={index} className="p-4 border rounded-lg space-y-2">
                     <div className="font-medium text-sm text-red-600 dark:text-red-400">
-                      Problema: {item.problem}
+                      Problem: {item.problem}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Soluzione: {item.solution}
+                      Solution: {item.solution}
                     </div>
                   </div>
                 ))}
@@ -243,7 +243,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5" />
-                <span>Equilibrio Nutrizionale</span>
+                <span>Nutritional Balance</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -269,7 +269,7 @@ const QuickReference = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Shield className="h-5 w-5" />
-                <span>Sicurezza in Cucina con i Bambini</span>
+                <span>Kitchen Safety with Children</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
