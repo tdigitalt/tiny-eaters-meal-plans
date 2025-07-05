@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'meal-planner-v3';
+const CACHE_NAME = 'meal-planner-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -8,7 +8,7 @@ const urlsToCache = [
   '/icon-512.png'
 ];
 
-// Install event
+// Install event - cache resources
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
   event.waitUntil(
@@ -21,10 +21,11 @@ self.addEventListener('install', (event) => {
         console.error('Failed to cache resources:', error);
       })
   );
+  // Force the new service worker to take control immediately
   self.skipWaiting();
 });
 
-// Activate event
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
   event.waitUntil(
@@ -39,10 +40,11 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  // Take control of all open tabs immediately
   self.clients.claim();
 });
 
-// Fetch event
+// Fetch event - serve cached content when offline
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
@@ -60,7 +62,7 @@ self.addEventListener('fetch', (event) => {
               return response;
             }
 
-            // Clone the response
+            // Clone the response for caching
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
@@ -80,14 +82,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Enhanced PWA installation detection
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-
-// Push notifications
+// Handle push notifications
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'Nuova notifica da Family Meal Planner',
@@ -97,10 +92,26 @@ self.addEventListener('push', (event) => {
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 1
-    }
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Apri App',
+        icon: '/icon-192.png'
+      }
+    ]
   };
 
   event.waitUntil(
     self.registration.showNotification('Family Meal Planner', options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  
+  event.waitUntil(
+    clients.openWindow('/')
   );
 });
