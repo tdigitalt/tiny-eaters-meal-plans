@@ -74,38 +74,38 @@ const QuickReference = () => {
       </Card>
 
       <Tabs defaultValue="portions" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-1">
-          <TabsTrigger value="portions" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Scale className="h-3 w-3" />
+        <TabsList className="w-full h-auto p-1 grid grid-cols-2 gap-1 sm:grid-cols-4 lg:grid-cols-7">
+          <TabsTrigger value="portions" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Scale className="h-4 w-4 mb-1" />
             <span>Portions</span>
           </TabsTrigger>
-          <TabsTrigger value="storage" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Archive className="h-3 w-3" />
+          <TabsTrigger value="storage" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Archive className="h-4 w-4 mb-1" />
             <span>Storage</span>
           </TabsTrigger>
-          <TabsTrigger value="substitutions" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Zap className="h-3 w-3" />
-            <span>Substitutions</span>
+          <TabsTrigger value="substitutions" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Zap className="h-4 w-4 mb-1" />
+            <span>Subs</span>
           </TabsTrigger>
-          <TabsTrigger value="prep" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Clock className="h-3 w-3" />
+          <TabsTrigger value="prep" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Clock className="h-4 w-4 mb-1" />
             <span>Prep</span>
           </TabsTrigger>
-          <TabsTrigger value="troubleshooting" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <AlertTriangle className="h-3 w-3" />
+          <TabsTrigger value="troubleshooting" className="flex flex-col items-center justify-center h-16 text-xs">
+            <AlertTriangle className="h-4 w-4 mb-1" />
             <span>Help</span>
           </TabsTrigger>
-          <TabsTrigger value="nutrition" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Users className="h-3 w-3" />
+          <TabsTrigger value="nutrition" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Users className="h-4 w-4 mb-1" />
             <span>Nutrition</span>
           </TabsTrigger>
-          <TabsTrigger value="safety" className="flex items-center justify-center space-x-1 text-xs px-2">
-            <Shield className="h-3 w-3" />
+          <TabsTrigger value="safety" className="flex flex-col items-center justify-center h-16 text-xs">
+            <Shield className="h-4 w-4 mb-1" />
             <span>Safety</span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="portions" className="space-y-4">
+        <TabsContent value="portions" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -149,7 +149,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="storage" className="space-y-4">
+        <TabsContent value="storage" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -170,7 +170,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="substitutions" className="space-y-4">
+        <TabsContent value="substitutions" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -181,10 +181,9 @@ const QuickReference = () => {
             <CardContent>
               <div className="space-y-3">
                 {substitutions.map((sub, index) => (
-                  <div key={index} className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 p-3 bg-muted/50 rounded-lg">
-                    <Badge variant="secondary" className="shrink-0 w-fit">{sub.original}</Badge>
-                    <span className="hidden sm:inline text-muted-foreground">→</span>
-                    <span className="text-sm flex-1">{sub.substitute}</span>
+                  <div key={index} className="flex flex-col space-y-2 p-3 bg-muted/50 rounded-lg">
+                    <Badge variant="secondary" className="w-fit">{sub.original}</Badge>
+                    <div className="text-sm">{sub.substitute}</div>
                   </div>
                 ))}
               </div>
@@ -192,7 +191,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="prep" className="space-y-4">
+        <TabsContent value="prep" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -213,7 +212,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="troubleshooting" className="space-y-4">
+        <TabsContent value="troubleshooting" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -238,7 +237,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="nutrition" className="space-y-4">
+        <TabsContent value="nutrition" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -264,7 +263,7 @@ const QuickReference = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="safety" className="space-y-4">
+        <TabsContent value="safety" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
