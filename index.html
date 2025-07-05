@@ -7,29 +7,14 @@
     <title>Family Meal Planner - Smart Meal Planning for Busy Parents</title>
     <meta name="description" content="Transform picky eaters into happy eaters with our comprehensive meal planning PWA designed for busy parents with toddlers ages 2-5." />
     <meta name="author" content="Family Meal Planner" />
-    <meta name="keywords" content="meal planning, family meals, toddler meals, picky eaters, shopping list, PWA" />
-    
-    <!-- PWA Configuration -->
-    <meta name="theme-color" content="#7CB342" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Meal Planner" />
-    <meta name="msapplication-TileColor" content="#7CB342" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    
-    <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <meta name="keywords" content="meal planning, family meals, toddler meals, picky eaters, shopping list" />
     
     <!-- Icons -->
     <link rel="icon" href="/icon-192.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="Family Meal Planner - Smart Meal Planning for Busy Parents" />
-    <meta property="og:description" content="Transform picky eaters into happy eaters with our comprehensive meal planning PWA designed for busy parents with toddlers ages 2-5." />
+    <meta property="og:description" content="Transform picky eaters into happy eaters with our comprehensive meal planning designed for busy parents with toddlers ages 2-5." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=1200&h=630&fit=crop" />
 
@@ -46,97 +31,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Enhanced PWA Installation and Detection -->
-    <script>
-      // Enhanced PWA detection and installation
-      let deferredPrompt;
-      let isStandalone = false;
-
-      // Check if app is already installed
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-        isStandalone = true;
-        console.log('App is running in standalone mode');
-      }
-
-      // Listen for beforeinstallprompt event
-      window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('beforeinstallprompt event fired');
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Show custom install prompt if not already standalone
-        if (!isStandalone) {
-          showInstallPrompt();
-        }
-      });
-
-      // Listen for appinstalled event
-      window.addEventListener('appinstalled', (e) => {
-        console.log('App was installed');
-        isStandalone = true;
-        hideInstallPrompt();
-      });
-
-      // Function to show install prompt
-      function showInstallPrompt() {
-        // Create install banner
-        const installBanner = document.createElement('div');
-        installBanner.id = 'install-banner';
-        installBanner.innerHTML = `
-          <div style="position: fixed; top: 0; left: 0; right: 0; background: #7CB342; color: white; padding: 16px; text-align: center; z-index: 9999; font-family: system-ui, -apple-system, sans-serif;">
-            <div style="max-width: 400px; margin: 0 auto;">
-              <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 500;">Installa Family Meal Planner</p>
-              <div style="display: flex; gap: 12px; justify-content: center;">
-                <button id="install-btn" style="background: white; color: #7CB342; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer;">
-                  Installa Ora
-                </button>
-                <button id="dismiss-btn" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-                  Più tardi
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.body.appendChild(installBanner);
-        
-        // Add event listeners
-        document.getElementById('install-btn').addEventListener('click', installApp);
-        document.getElementById('dismiss-btn').addEventListener('click', hideInstallPrompt);
-      }
-
-      // Function to hide install prompt
-      function hideInstallPrompt() {
-        const banner = document.getElementById('install-banner');
-        if (banner) {
-          banner.remove();
-        }
-      }
-
-      // Function to install app
-      async function installApp() {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          console.log(`User response to the install prompt: ${outcome}`);
-          deferredPrompt = null;
-        }
-        hideInstallPrompt();
-      }
-
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
   </body>
 </html>
